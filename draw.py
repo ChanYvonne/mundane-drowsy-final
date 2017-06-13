@@ -366,6 +366,8 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
             loop_start = y1
             loop_end = y
 
+    dz = float(z1 - z)/(loop_end - loop_start) if loop_end != loop_start else 0
+
     while ( loop_start < loop_end ):
         plot( screen, zbuffer, color, x, y, z )
         if ( (wide and ((A > 0 and d > 0) or (A < 0 and d < 0))) or
@@ -377,6 +379,7 @@ def draw_line( x0, y0, z0, x1, y1, z1, screen, zbuffer, color ):
             x+= dx_east
             y+= dy_east
             d+= d_east
+        z += dz
         loop_start+= 1
 
     plot( screen, zbuffer, color, x, y, z )
