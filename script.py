@@ -1,4 +1,5 @@
 import mdl
+import os
 from display import *
 from matrix import *
 from draw import *
@@ -98,7 +99,7 @@ def run(filename):
     """
     This function runs an mdl script
     """
-    color = [255, 255, 255]
+    color = [0, 0, 0]
     tmp = new_matrix()
     ident( tmp )
 
@@ -149,7 +150,8 @@ def run(filename):
                 add_box(tmp,
                         args[0], args[1], args[2],
                         args[3], args[4], args[5])
-                matrix_mult( stack[-1], tmp )
+                matrix_mult( stack[-1], tmp)
+                
                 draw_polygons(tmp, screen, zb, color)
                 tmp = []
             elif c == 'sphere':
@@ -197,15 +199,19 @@ def run(filename):
             elif c == 'pop':
                 stack.pop()
             elif c == 'display':
-                display(screen)
+                save_ppm(screen, 'pic.ppm')
             elif c == 'save':
-                save_extension(screen, args[0])
+                save_ppm(screen, args[0])
         
+        #print basename
         if num_frames > 1:
-            fname = 'anim/%s%03d.png' % (name, f)
+            fname = 'anim/' + name + (3-len(str(f)))*'0' + str(f) + '.ppm'
+            save_ppm(screen, fname)
             print 'Saving frame: ' + fname
-            save_extension( screen, fname )
+            clear_screen(screen)
 
-    if num_frames > 1:
-        make_animation(name)
+        if not os.path.exists('anim'):
+            os.makedirs('anim')
+            clear_screen(screen)
+
     
